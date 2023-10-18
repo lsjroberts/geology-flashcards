@@ -90,32 +90,31 @@ subscriptions _ =
 view : Model -> Html Msg
 view { question, status, correct, incorrect } =
     layout [ width fill, height fill ] <|
-        el [ centerX, centerY ] <|
-            case question of
-                Nothing ->
-                    el [ centerX ] <| Input.button [ centerX, padding 10, Background.color (rgb 0.2 0.2 0.2), Font.color (rgb 1 1 1) ] { onPress = Just Start, label = text "Start" }
+        case question of
+            Nothing ->
+                el [ centerX, centerY ] <| Input.button [ centerX, padding 10, Background.color (rgb 0.2 0.2 0.2), Font.color (rgb 1 1 1) ] { onPress = Just Start, label = text "Start" }
 
-                Just q ->
-                    column [ spacing 40, centerX ]
-                        [ case status of
-                            Ask ->
-                                column [ spacing 40, centerX ]
-                                    [ Question.viewQuestion q
-                                    , el [ centerX ] <| text "?"
-                                    , Input.button [ centerX, padding 10, Background.color (rgb 0.2 0.2 0.2), Font.color (rgb 1 1 1) ] { onPress = Just ShowAnswer, label = text "Show answer" }
-                                    ]
+            Just q ->
+                column [ spacing 40, centerX, centerY ]
+                    [ case status of
+                        Ask ->
+                            column [ spacing 40, centerX ]
+                                [ Question.viewQuestion q
+                                , el [ centerX ] <| text "?"
+                                , Input.button [ centerX, padding 10, Background.color (rgb 0.2 0.2 0.2), Font.color (rgb 1 1 1) ] { onPress = Just ShowAnswer, label = text "Show answer" }
+                                ]
 
-                            Answer ->
-                                column [ spacing 40, centerX ]
-                                    [ Question.viewQuestion q
-                                    , Question.viewAnswer q
-                                    , row [ spacing 40, centerX ]
-                                        [ Input.button [ centerX, padding 10, Background.color (rgb 0.8 0.2 0.2), Font.color (rgb 1 1 1) ] { onPress = Just Incorrect, label = text "Incorrect" }
-                                        , Input.button [ centerX, padding 10, Background.color (rgb 0.2 0.8 0.2), Font.color (rgb 1 1 1) ] { onPress = Just Correct, label = text "Correct" }
-                                        ]
+                        Answer ->
+                            column [ spacing 40, centerX ]
+                                [ Question.viewQuestion q
+                                , Question.viewAnswer q
+                                , row [ spacing 40, centerX ]
+                                    [ Input.button [ centerX, padding 10, Background.color (rgb 0.8 0.2 0.2), Font.color (rgb 1 1 1) ] { onPress = Just Incorrect, label = text "Incorrect" }
+                                    , Input.button [ centerX, padding 10, Background.color (rgb 0.2 0.8 0.2), Font.color (rgb 1 1 1) ] { onPress = Just Correct, label = text "Correct" }
                                     ]
-                        , viewScore correct incorrect
-                        ]
+                                ]
+                    , viewScore correct incorrect
+                    ]
 
 
 viewScore : Int -> Int -> Element msg
